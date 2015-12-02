@@ -20,7 +20,8 @@
         max: '=',
         model: '=ngModel',
         opts: '=options',
-        clearable: '='
+        clearable: '=',
+        hidePredefinedRanges: '='
       },
       link: function($scope, element, attrs, modelCtrl) {
         var customOpts, el, opts, _clear, _format, _init, _initBoundaryField, _mergeOpts, _picker, _setDatePoint, _setEndDate, _setStartDate, _setViewValue, _validate, _validateMax, _validateMin;
@@ -38,6 +39,19 @@
         el = $(element);
         customOpts = $scope.opts;
         opts = _mergeOpts({}, dateRangePickerConfig, customOpts);
+
+        if(!$scope.hidePredefinedRanges){
+          opts.ranges = {
+            'today': {0: moment(), 1: moment(), displayName: 'Today'},
+            'yesterday': {0: moment().subtract(1, 'days'), 1: moment().subtract(1, 'days'), displayName: 'Yesterday'},
+            'last7days': {0: moment().subtract(6, 'days'), 1: moment(), displayName: 'Last 7 days'},
+            'next7days': {0: moment(), 1: moment().add(6, 'days'), displayName: 'Next 7 days'},
+            'after_date': {0: moment(), 1: null, displayName: 'After the date'},
+            'before_date': {0: null, 1: moment(), displayName: 'Before the date'},
+            'specific_date': {0: moment(), 1: moment(), displayName: 'Specific date'},
+          }
+        }
+
         _picker = null;
         _clear = function() {
           _picker.setStartDate();
