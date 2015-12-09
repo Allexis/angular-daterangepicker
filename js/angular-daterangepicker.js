@@ -4,15 +4,10 @@
   picker = angular.module('daterangepicker', []);
 
   picker.constant('dateRangePickerConfig', {
-    clearLabel: 'Clear',
-    locale: {
-      separator: ' - ',
-      format: 'YYYY-MM-DD',
-      invalidLabel: 'Infinite'
-    }
+    clearLabel: 'Clear'
   });
 
-  picker.directive('dateRangePicker', ['$compile', '$timeout', '$parse', 'dateRangePickerConfig', function($compile, $timeout, $parse, dateRangePickerConfig) {
+  picker.directive('dateRangePicker', ['$compile', '$timeout', '$parse', 'dateRangePickerConfig', '$filter', function($compile, $timeout, $parse, dateRangePickerConfig, $filter) {
     return {
       require: 'ngModel',
       restrict: 'A',
@@ -40,6 +35,21 @@
           return extend;
         };
         el = $(element);
+
+        dateRangePickerConfig.locale = {
+          separator: ' - ',
+          format: 'YYYY-MM-DD',
+          invalidLabel: $filter('translate')('common.infinite') || 'Infinite',
+            applyLabel: $filter('translate')('common.ok') || 'OK',
+            cancelLabel: $filter('translate')('common.cancel'),
+            customRangeLabel: $filter('translate')('common.date_range') || 'Custom Range',
+            daysOfWeek: moment.weekdaysMin(),
+            monthNames: moment.monthsShort(),
+            firstDay: 0, // TODO: moment.localeData().firstDayOfWeek()
+            startDate: $filter('translate')('common.start_date') || 'Start date',
+            endDate: $filter('translate')('common.end_date') || 'End date',
+            pickTime: $filter('translate')('common.pick_time') || 'Pick time:'
+        }
 
         customOpts = $scope.opts;
         opts = _mergeOpts({}, dateRangePickerConfig, customOpts);
