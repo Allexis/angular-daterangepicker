@@ -7,7 +7,8 @@
     clearLabel: 'Clear',
     locale: {
       separator: ' - ',
-      format: 'YYYY-MM-DD'
+      format: 'YYYY-MM-DD',
+      invalidLabel: 'Infinite'
     }
   });
 
@@ -21,10 +22,12 @@
         model: '=ngModel',
         opts: '=options',
         clearable: '=',
-        hidePredefinedRanges: '='
+        hidePredefinedRanges: '=',
+        time: '='
       },
       link: function($scope, element, attrs, modelCtrl) {
         var customOpts, el, opts, _clear, _format, _init, _initBoundaryField, _mergeOpts, _picker, _setDatePoint, _setEndDate, _setStartDate, _setViewValue, _validate, _validateMax, _validateMin;
+
         _mergeOpts = function() {
           var extend, localeExtend;
           localeExtend = angular.extend.apply(angular, Array.prototype.slice.call(arguments).map(function(opt) {
@@ -37,18 +40,24 @@
           return extend;
         };
         el = $(element);
+
         customOpts = $scope.opts;
         opts = _mergeOpts({}, dateRangePickerConfig, customOpts);
 
+        // TODO
+        if(!$scope.time){
+          opts.timePicker = true;
+        }
+
         if(!$scope.hidePredefinedRanges){
           opts.ranges = {
-            'today': {0: moment(), 1: moment(), displayName: 'Today'},
-            'yesterday': {0: moment().subtract(1, 'days'), 1: moment().subtract(1, 'days'), displayName: 'Yesterday'},
-            'last7days': {0: moment().subtract(6, 'days'), 1: moment(), displayName: 'Last 7 days'},
-            'next7days': {0: moment(), 1: moment().add(6, 'days'), displayName: 'Next 7 days'},
-            'after_date': {0: moment(), 1: null, displayName: 'After the date'},
-            'before_date': {0: null, 1: moment(), displayName: 'Before the date'},
-            'specific_date': {0: moment(), 1: moment(), displayName: 'Specific date'},
+            'today': {0: moment().startOf('day'), 1: moment().endOf('day'), displayName: 'Today'},
+            'yesterday': {0: moment().subtract(1, 'days').startOf('day'), 1: moment().subtract(1, 'days').endOf('day'), displayName: 'Yesterday'},
+            'last7days': {0: moment().subtract(6, 'days').startOf('day'), 1: moment().endOf('day'), displayName: 'Last 7 days'},
+            'next7days': {0: moment().startOf('day'), 1: moment().add(6, 'days').endOf('day'), displayName: 'Next 7 days'},
+            'after_date': {0: moment().startOf('day'), 1: null, displayName: 'After the date'},
+            'before_date': {0: null, 1: moment().endOf('day'), displayName: 'Before the date'},
+            'specific_date': {0: moment().startOf('day'), 1: moment().endOf('day'), displayName: 'Specific date'},
           }
         }
 
@@ -65,28 +74,34 @@
           };
         };
         _setStartDate = _setDatePoint(function(m) {
+
           if (_picker.endDate < m) {
-            _picker.setEndDate(m);
+            //_picker.setEndDate(m);
           }
-          return _picker.setStartDate(m);
+          //return _picker.setStartDate(m);
         });
         _setEndDate = _setDatePoint(function(m) {
+
           if (_picker.startDate > m) {
-            _picker.setStartDate(m);
+            //_picker.setStartDate(m);
           }
-          return _picker.setEndDate(m);
+          return //_picker.setEndDate(m);
         });
         _format = function(objValue) {
-          var f;
+          var f, 
+            formattedDate;
+
           f = function(date) {
             if (!moment.isMoment(date)) {
-              return moment(date).format(opts.locale.format);
+              formattedDate = moment(date);
+              return formattedDate.isValid() ? formattedDate.format(opts.locale.format) : opts.locale.invalidLabel;
             } else {
               return date.format(opts.locale.format);
             }
           };
+
           if (objValue) {
-            if (opts.singleDatePicker) {
+            if (opts.singleDatePicker || (moment.isMoment(objValue.startDate) && moment.isMoment(objValue.endDate) && objValue.startDate.isSame(objValue.endDate,'day') ) ) {
               return f(objValue.startDate);
             } else {
               return [f(objValue.startDate), f(objValue.endDate)].join(opts.locale.separator);
@@ -97,6 +112,7 @@
         };
         _setViewValue = function(objValue) {
           var value;
+
           value = _format(objValue);
           el.val(value);
           return modelCtrl.$setViewValue(value);
@@ -126,26 +142,16 @@
           }
           return el.val(modelCtrl.$viewValue);
         };
+        
         modelCtrl.$parsers.push(function(val) {
-          var f, objValue, x;
-          f = function(value) {
-            return moment(value, opts.locale.format);
-          };
-          objValue = {
-            startDate: null,
-            endDate: null
-          };
-          if (angular.isString(val) && val.length > 0) {
-            if (opts.singleDatePicker) {
-              objValue = f(val);
-            } else {
-              x = val.split(opts.locale.separator).map(f);
-              objValue.startDate = x[0];
-              objValue.endDate = x[1];
+
+          return {
+              'startDate': _picker.startDate,
+              'endDate': _picker.endDate
             }
-          }
-          return objValue;
+
         });
+        
         modelCtrl.$isEmpty = function(val) {
           return !(angular.isString(val) && val.length > 0);
         };
@@ -160,6 +166,23 @@
             });
           });
           _picker = el.data('daterangepicker');
+
+          $(_picker.element).on('hide.daterangepicker', function(){
+
+            $scope.model = {
+              'startDate': _picker.startDate,
+              'endDate': _picker.endDate
+            }
+
+            // trigger parsers
+            angular.forEach(modelCtrl.$parsers, function (parser) {
+                parser();
+            });
+
+            $scope.$apply();
+
+          });
+
           _results = [];
           for (eventType in opts.eventHandlers) {
             _results.push(el.on(eventType, function(e) {
