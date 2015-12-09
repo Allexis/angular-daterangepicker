@@ -44,8 +44,7 @@
         customOpts = $scope.opts;
         opts = _mergeOpts({}, dateRangePickerConfig, customOpts);
 
-        // TODO
-        if(!$scope.time){
+        if($scope.time){
           opts.timePicker = true;
         }
 
