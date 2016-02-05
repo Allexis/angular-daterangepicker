@@ -38,7 +38,7 @@
 
         dateRangePickerConfig.locale = {
           separator: ' - ',
-          format: 'YYYY-MM-DD',
+          format: 'YYYY-MM-DD, hh:mm A',
           invalidLabel: $filter('translate')('common.infinite') || 'Infinite',
             applyLabel: $filter('translate')('common.ok') || 'OK',
             cancelLabel: $filter('translate')('common.cancel'),
@@ -46,9 +46,10 @@
             daysOfWeek: moment.weekdaysMin(),
             monthNames: moment.monthsShort(),
             firstDay: 0, // TODO: moment.localeData().firstDayOfWeek()
-            startDate: $filter('translate')('common.start_date') || 'Start date',
+            startDate: $filter('translate')('common.start_date'),
             endDate: $filter('translate')('common.end_date') || 'End date',
-            pickTime: $filter('translate')('common.pick_time') || 'Pick time:'
+            pickTime: $filter('translate')('common.pick_time') || 'Pick time:',
+            nowLabel: $filter('translate')('common.now') || 'Now'
         }
 
         customOpts = $scope.opts;
@@ -60,13 +61,13 @@
 
         if(!$scope.hidePredefinedRanges){
           opts.ranges = {
-            'today': {0: moment().startOf('day'), 1: moment().endOf('day'), displayName: 'Today'},
-            'yesterday': {0: moment().subtract(1, 'days').startOf('day'), 1: moment().subtract(1, 'days').endOf('day'), displayName: 'Yesterday'},
-            'last7days': {0: moment().subtract(6, 'days').startOf('day'), 1: moment().endOf('day'), displayName: 'Last 7 days'},
-            'next7days': {0: moment().startOf('day'), 1: moment().add(6, 'days').endOf('day'), displayName: 'Next 7 days'},
+            'today': {0: moment().startOf('day'), 1: moment().endOf('day'), displayName: 'Today', hideTimePicker: true},
+            'yesterday': {0: moment().subtract(1, 'days').startOf('day'), 1: moment().subtract(1, 'days').endOf('day'), displayName: 'Yesterday', hideTimePicker: true},
+            'last7days': {0: moment().subtract(6, 'days').startOf('day'), 1: moment().endOf('day'), displayName: 'Last 7 days', hideTimePicker: true},
+            'next7days': {0: moment().startOf('day'), 1: moment().add(6, 'days').endOf('day'), displayName: 'Next 7 days', hideTimePicker: true},
             'after_date': {0: moment().startOf('day'), 1: null, displayName: 'After the date'},
             'before_date': {0: null, 1: moment().endOf('day'), displayName: 'Before the date'},
-            'specific_date': {0: moment().startOf('day'), 1: moment().endOf('day'), displayName: 'Specific date'},
+            'specific_date': {0: moment().startOf('day'), 1: moment().endOf('day'), displayName: 'Specific date', hideTimePicker: true},
           }
         }
 
