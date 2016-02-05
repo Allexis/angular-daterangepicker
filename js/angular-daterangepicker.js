@@ -71,6 +71,8 @@
           }
         }
 
+        opts.date = $scope.model;
+
         _picker = null;
         _clear = function() {
           _picker.setStartDate();
