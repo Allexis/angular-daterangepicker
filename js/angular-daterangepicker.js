@@ -61,13 +61,13 @@
 
         if(!$scope.hidePredefinedRanges){
           opts.ranges = {
-            'today': {0: moment().startOf('day'), 1: moment().endOf('day'), displayName: 'Today', hideTimePicker: true},
-            'yesterday': {0: moment().subtract(1, 'days').startOf('day'), 1: moment().subtract(1, 'days').endOf('day'), displayName: 'Yesterday', hideTimePicker: true},
-            'last7days': {0: moment().subtract(6, 'days').startOf('day'), 1: moment().endOf('day'), displayName: 'Last 7 days', hideTimePicker: true},
-            'next7days': {0: moment().startOf('day'), 1: moment().add(6, 'days').endOf('day'), displayName: 'Next 7 days', hideTimePicker: true},
-            'after_date': {0: moment().startOf('day'), 1: null, displayName: 'After the date'},
-            'before_date': {0: null, 1: moment().endOf('day'), displayName: 'Before the date'},
-            'specific_date': {0: moment().startOf('day'), 1: moment().endOf('day'), displayName: 'Specific date', hideTimePicker: true},
+            'today': {0: moment().startOf('day'), 1: moment().endOf('day'), displayName: $filter('translate')('common.today'), hideTimePicker: true},
+            'yesterday': {0: moment().subtract(1, 'days').startOf('day'), 1: moment().subtract(1, 'days').endOf('day'), displayName: $filter('translate')('common.yesterday'), hideTimePicker: true},
+            'last7days': {0: moment().subtract(6, 'days').startOf('day'), 1: moment().endOf('day'), displayName: $filter('translate')('backend.lookup.daterangetype_3'), hideTimePicker: true},
+            'next7days': {0: moment().startOf('day'), 1: moment().add(6, 'days').endOf('day'), displayName: $filter('translate')('common.datefilter.next7days'), hideTimePicker: true},
+            'after_date': {0: moment().startOf('day'), 1: null, displayName: $filter('translate')('common.datefilter.after_date')},
+            'before_date': {0: null, 1: moment().endOf('day'), displayName: $filter('translate')('common.datefilter.before_date')},
+            'specific_date': {0: moment().startOf('day'), 1: moment().endOf('day'), displayName: $filter('translate')('backend.lookup.daterangetype_103'), hideTimePicker: true},
           }
         }
 
