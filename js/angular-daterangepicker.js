@@ -67,11 +67,14 @@
             'next7days': {0: moment().startOf('day'), 1: moment().add(6, 'days').endOf('day'), displayName: $filter('translate')('common.datefilter.next7days'), hideTimePicker: true},
             'after_date': {0: moment().startOf('day'), 1: null, displayName: $filter('translate')('common.datefilter.after_date')},
             'before_date': {0: null, 1: moment().endOf('day'), displayName: $filter('translate')('common.datefilter.before_date')},
-            'specific_date': {0: moment().startOf('day'), 1: moment().endOf('day'), displayName: $filter('translate')('backend.lookup.daterangetype_103'), hideTimePicker: true},
+            'specific_date': {0: moment().startOf('day'), 1: moment().endOf('day'), displayName: $filter('translate')('backend.lookup.daterangetype_103')},
           }
         }
 
-        opts.date = $scope.model;
+        opts.date = {
+          startDate: moment($scope.model.startDate).isValid() ? moment($scope.model.startDate) : null,
+          endDate: moment($scope.model.endDate).isValid() ? moment($scope.model.endDate) : null
+        }
 
         _picker = null;
         _clear = function() {
@@ -169,6 +172,7 @@
         };
         _init = function() {
           var eventType, _results;
+
           el.daterangepicker(angular.extend(opts, {
             autoUpdateInput: false
           }), function(start, end) {
@@ -182,8 +186,8 @@
           $(_picker.element).on('hide.daterangepicker', function(){
 
             $scope.model = {
-              'startDate': _picker.startDate,
-              'endDate': _picker.endDate
+              'startDate': _picker.startDate && _picker.startDate.unix ? _picker.startDate.unix()*1000 : null,
+              'endDate': _picker.endDate && _picker.endDate.unix ? _picker.endDate.unix()*1000 : null
             }
 
             // trigger parsers
