@@ -121,7 +121,7 @@
             if (opts.singleDatePicker || (moment.isMoment(objValue.startDate) && moment.isMoment(objValue.endDate) && objValue.startDate.isSame(objValue.endDate,'day') ) ) {
               return f(objValue.startDate);
             } else {
-              return [f(objValue.startDate), f(objValue.endDate)].join(opts.locale.separator);
+              return objValue.startDate || objValue.endDate ? [f(objValue.startDate), f(objValue.endDate)].join(opts.locale.separator) : '';
             }
           } else {
             return '';
