@@ -71,9 +71,11 @@
           }
         }
 
+        var date = angular.isFunction($scope.model) ? $scope.model() : $scope.model;
+
         opts.date = {
-          startDate: moment($scope.model.startDate).isValid() ? moment($scope.model.startDate) : null,
-          endDate: moment($scope.model.endDate).isValid() ? moment($scope.model.endDate) : null
+          startDate: moment(date.startDate).isValid() ? moment(date.startDate) : null,
+          endDate: moment(date.endDate).isValid() ? moment(date.endDate) : null
         }
 
         _picker = null;
@@ -185,9 +187,17 @@
 
           $(_picker.element).on('hide.daterangepicker', function(){
 
-            $scope.model = {
+            var newVal = {
               'startDate': _picker.startDate && _picker.startDate.unix ? _picker.startDate.unix()*1000 : null,
               'endDate': _picker.endDate && _picker.endDate.unix ? _picker.endDate.unix()*1000 : null
+            }
+
+            if (angular.isFunction($scope.model)) {
+              $scope.model(newVal)
+            } else if (angular.isObject($scope.model))  {
+              angular.extend($scope.model, newVal)
+            } else {
+              throw new Error('Datepicker model should be an object')
             }
 
             // trigger parsers
