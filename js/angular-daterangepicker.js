@@ -39,6 +39,7 @@
         dateRangePickerConfig.locale = {
           separator: ' - ',
           format: 'YYYY-MM-DD, hh:mm A',
+          formatDate: 'YYYY-MM-DD',
           invalidLabel: $filter('translate')('common.infinite') || 'Infinite',
             applyLabel: $filter('translate')('common.ok') || 'OK',
             cancelLabel: $filter('translate')('common.cancel'),
@@ -108,18 +109,21 @@
           var f, 
             formattedDate;
 
-          f = function(date) {
+          f = function(date,format) {
+            if(!format) {
+              format = opts.locale.format;
+            }
             if (!moment.isMoment(date)) {
               formattedDate = moment(date);
-              return formattedDate.isValid() ? formattedDate.format(opts.locale.format) : opts.locale.invalidLabel;
+              return formattedDate.isValid() ? formattedDate.format(format) : opts.locale.invalidLabel;
             } else {
-              return date.format(opts.locale.format);
+              return date.format(format);
             }
           };
 
           if (objValue) {
-            if (opts.singleDatePicker || (moment.isMoment(objValue.startDate) && moment.isMoment(objValue.endDate) && objValue.startDate.isSame(objValue.endDate,'day') ) ) {
-              return f(objValue.startDate);
+            if (opts.singleDatePicker || (moment.isMoment(objValue.startDate) && moment.isMoment(objValue.endDate) && objValue.startDate.isSame(objValue.endDate,'day') && !_picker.timePicker) ) {
+              return f(objValue.startDate,opts.locale.formatDate);
             } else {
               return objValue.startDate || objValue.endDate ? [f(objValue.startDate), f(objValue.endDate)].join(opts.locale.separator) : '';
             }
