@@ -196,8 +196,6 @@
               'endDate': _picker.endDate && _picker.endDate.unix ? _picker.endDate.unix()*1000 : null
             }
 
-            console.log(newVal);
-
             if (angular.isFunction($scope.model)) {
               $scope.model(newVal)
             } else if (angular.isObject($scope.model))  {
