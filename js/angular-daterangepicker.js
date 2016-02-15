@@ -196,6 +196,8 @@
               'endDate': _picker.endDate && _picker.endDate.unix ? _picker.endDate.unix()*1000 : null
             }
 
+            console.log(newVal);
+
             if (angular.isFunction($scope.model)) {
               $scope.model(newVal)
             } else if (angular.isObject($scope.model))  {
@@ -224,14 +226,7 @@
           return _results;
         };
         _init();
-        $scope.$watch('model.startDate', function(n) {
-          _setStartDate(n);
-          return _setViewValue($scope.model);
-        });
-        $scope.$watch('model.endDate', function(n) {
-          _setEndDate(n);
-          return _setViewValue($scope.model);
-        });
+
         _initBoundaryField = function(field, validator, modelField, optName) {
           if (attrs[field]) {
             modelCtrl.$validators[field] = function(value) {
