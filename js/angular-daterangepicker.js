@@ -106,7 +106,7 @@
           return //_picker.setEndDate(m);
         });
         _format = function(objValue) {
-          var f, 
+          var f,
             formattedDate;
 
           f = function(date,format) {
@@ -136,7 +136,6 @@
 
           value = _format(objValue);
           el.val(value);
-          return modelCtrl.$setViewValue(value);
         };
         _validate = function(validator) {
           return function(boundary, actual) {
@@ -163,7 +162,7 @@
           }
           return el.val(modelCtrl.$viewValue);
         };
-        
+
         modelCtrl.$parsers.push(function(val) {
 
           return {
@@ -172,7 +171,7 @@
             }
 
         });
-        
+
         modelCtrl.$isEmpty = function(val) {
           return !(angular.isString(val) && val.length > 0);
         };
