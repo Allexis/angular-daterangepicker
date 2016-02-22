@@ -18,7 +18,8 @@
         opts: '=options',
         clearable: '=',
         hidePredefinedRanges: '=',
-        time: '='
+        time: '=',
+        icon: '@'
       },
       link: function($scope, element, attrs, modelCtrl) {
         var customOpts, el, opts, _clear, _format, _init, _initBoundaryField, _mergeOpts, _picker, _setDatePoint, _setEndDate, _setStartDate, _setViewValue, _validate, _validateMax, _validateMin;
@@ -106,7 +107,7 @@
           return //_picker.setEndDate(m);
         });
         _format = function(objValue) {
-          var f,
+          var f, 
             formattedDate;
 
           f = function(date,format) {
@@ -133,7 +134,6 @@
         };
         _setViewValue = function(objValue) {
           var value;
-
           value = _format(objValue);
           el.val(value);
         };
@@ -162,7 +162,7 @@
           }
           return el.val(modelCtrl.$viewValue);
         };
-
+        
         modelCtrl.$parsers.push(function(val) {
 
           return {
@@ -171,12 +171,17 @@
             }
 
         });
-
+        
         modelCtrl.$isEmpty = function(val) {
           return !(angular.isString(val) && val.length > 0);
         };
         _init = function() {
-          var eventType, _results;
+          var eventType, _results, wrapEl;
+
+          $scope.icon = $scope.icon || 'icon-datepicker';
+
+          wrapEl = el.wrap('<div class="ui input icon right"></div>');
+          el.after('<i class="icon '+$scope.icon+'"></i>');
 
           el.daterangepicker(angular.extend(opts, {
             autoUpdateInput: false
