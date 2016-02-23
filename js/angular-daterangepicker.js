@@ -180,8 +180,9 @@
 
           $scope.icon = $scope.icon || 'icon-datepicker';
 
-          wrapEl = el.wrap('<div class="ui input icon right"></div>');
+          wrapEl = el.wrap('<div class="alxDirectiveSuiDatepicker"></div>');
           el.after('<i class="icon '+$scope.icon+'"></i>');
+          el.prop('readonly','readonly');
 
           el.daterangepicker(angular.extend(opts, {
             autoUpdateInput: false
