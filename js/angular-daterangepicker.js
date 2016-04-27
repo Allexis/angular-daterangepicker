@@ -37,6 +37,12 @@
         };
         el = $(element);
 
+        $scope.icon = $scope.icon || 'icon-datepicker';
+
+        wrapEl = el.wrap('<div class="alxDirectiveSuiDatepicker"></div>');
+        el.after('<i class="icon '+$scope.icon+'"></i>');
+        el.prop('readonly','readonly');
+
         dateRangePickerConfig.locale = {
           separator: ' - ',
           format: 'YYYY-MM-DD, hh:mm A',
@@ -178,12 +184,6 @@
         _init = function() {
           var eventType, _results, wrapEl;
 
-          $scope.icon = $scope.icon || 'icon-datepicker';
-
-          wrapEl = el.wrap('<div class="alxDirectiveSuiDatepicker"></div>');
-          el.after('<i class="icon '+$scope.icon+'"></i>');
-          el.prop('readonly','readonly');
-
           el.daterangepicker(angular.extend(opts, {
             autoUpdateInput: false
           }), function(start, end) {
@@ -231,6 +231,7 @@
         _init();
 
         _initBoundaryField = function(field, validator, modelField, optName) {
+
           if (attrs[field]) {
             modelCtrl.$validators[field] = function(value) {
               return value && validator(opts[optName], value[modelField]);
