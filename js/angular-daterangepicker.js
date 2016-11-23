@@ -207,8 +207,9 @@
             $(_picker.element).on('hide.daterangepicker', function () {
 
               var newVal = {
-                'startDate': _picker.startDate && _picker.startDate.unix ? _picker.startDate.unix() * 1000 : null,
-                'endDate':   _picker.endDate && _picker.endDate.unix ? _picker.endDate.unix() * 1000 : null
+                startDate: _picker.startDate && _picker.startDate.unix ? _picker.startDate.unix() * 1000 : null,
+                endDate:   _picker.endDate && _picker.endDate.unix ? _picker.endDate.unix() * 1000 : null,
+                $current:  _picker
               }
 
               if (angular.isFunction($scope.model)) {
