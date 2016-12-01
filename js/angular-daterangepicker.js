@@ -183,7 +183,7 @@
             return {
               startDate: _picker.startDate,
               endDate:   _picker.endDate,
-              $current:  _picker
+              dateRangeTypeId:  _picker.chosenDateRangeTypeId
             }
 
           });
@@ -209,7 +209,7 @@
               var newVal = {
                 startDate: _picker.startDate && _picker.startDate.unix ? _picker.startDate.unix() * 1000 : null,
                 endDate:   _picker.endDate && _picker.endDate.unix ? _picker.endDate.unix() * 1000 : null,
-                $current:  _picker
+                dateRangeTypeId:  _picker.chosenDateRangeTypeId
               }
 
               if (angular.isFunction($scope.model)) {
