@@ -25,7 +25,8 @@
           clearable:            '=',
           hidePredefinedRanges: '=',
           time:                 '=',
-          icon:                 '@'
+          icon:                 '@',
+          single:               '=',
         },
         link:     function ($scope, element, attrs, modelCtrl) {
           var customOpts, el, opts, _clear, _format, _init, _initBoundaryField, _mergeOpts, _picker, _setDatePoint, _setEndDate, _setStartDate, _setViewValue, _validate, _validateMax, _validateMin;
@@ -63,17 +64,19 @@
             startDate:        $filter('translate')('common.start_date'),
             endDate:          $filter('translate')('common.end_date') || 'End date',
             pickTime:         $filter('translate')('common.pick_time') || 'Pick time:',
-            nowLabel:         $filter('translate')('common.now') || 'Now'
+            nowLabel:         $filter('translate')('common.now') || 'Now',
+            date:             $filter('translate')('common.date') || 'Date',
           }
 
           customOpts = $scope.opts;
           opts = _mergeOpts({}, dateRangePickerConfig, customOpts);
+          opts.singleDateAndTime = !!$scope.single;
 
           if ($scope.time) {
             opts.timePicker = true;
           }
 
-          if (!$scope.hidePredefinedRanges) {
+          if (!$scope.hidePredefinedRanges && !$scope.single) {
             opts.ranges = {
               'today':         {0: moment().startOf('day'), 1: moment().endOf('day'), displayName: $filter('translate')('common.today'), hideTimePicker: true},
               'yesterday':     {0: moment().subtract(1, 'days').startOf('day'), 1: moment().subtract(1, 'days').endOf('day'), displayName: $filter('translate')('common.yesterday'), hideTimePicker: true},
@@ -135,7 +138,10 @@
             };
 
             if (objValue) {
-              if (opts.singleDatePicker || (moment.isMoment(objValue.startDate) && moment.isMoment(objValue.endDate) && objValue.startDate.isSame(objValue.endDate, 'day') && !_picker.timePicker)) {
+              if(opts.singleDateAndTime && opts.timePicker) {
+                return f(objValue.startDate);
+              }
+              else if (opts.singleDateAndTime || opts.singleDatePicker || (moment.isMoment(objValue.startDate) && moment.isMoment(objValue.endDate) && objValue.startDate.isSame(objValue.endDate, 'day') && !_picker.timePicker)) {
                 return f(objValue.startDate, opts.locale.formatDate);
               } else {
                 return objValue.startDate || objValue.endDate ? [
