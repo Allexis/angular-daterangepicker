@@ -138,10 +138,10 @@
             };
 
             if (objValue) {
-              if(opts.singleDateAndTime && opts.timePicker) {
+              if(opts.singleDateAndTime && opts.timePicker && objValue.startDate) {
                 return f(objValue.startDate);
               }
-              else if (opts.singleDateAndTime || opts.singleDatePicker || (moment.isMoment(objValue.startDate) && moment.isMoment(objValue.endDate) && objValue.startDate.isSame(objValue.endDate, 'day') && !_picker.timePicker)) {
+              else if ((opts.singleDateAndTime && objValue.startDate) || opts.singleDatePicker || (moment.isMoment(objValue.startDate) && moment.isMoment(objValue.endDate) && objValue.startDate.isSame(objValue.endDate, 'day') && !_picker.timePicker)) {
                 return f(objValue.startDate, opts.locale.formatDate);
               } else {
                 return objValue.startDate || objValue.endDate ? [
