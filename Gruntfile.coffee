@@ -46,4 +46,4 @@ module.exports = (grunt) ->
   # Default task(s).
   grunt.registerTask "default", ["coffeelint", "coffee"]
   grunt.registerTask "develop", ["default", "watch"]
-  grunt.registerTask "dist", ["default", "ngAnnotate", "uglify"]
+  grunt.registerTask "dist", ["ngAnnotate", "uglify"]
