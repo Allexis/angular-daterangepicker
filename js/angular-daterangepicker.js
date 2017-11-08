@@ -233,6 +233,18 @@
             return !(angular.isString(val) && val.length > 0);
           };
 
+          function read() {
+            var newVal = {
+              startDate: _picker.startDate && _picker.startDate.unix ? _picker.startDate.unix() * 1000 : null,
+              endDate: _picker.endDate && _picker.endDate.unix ? _picker.endDate.unix() * 1000 : null,
+              dateRangeTypeId: _picker.chosenDateRangeTypeId
+            }
+
+            // update viewValue when closing datepicker
+            modelCtrl.$setViewValue(newVal);
+            _setDateInputValue(newVal)
+          }
+
           _init = function () {
             var eventType, _results, wrapEl;
 
@@ -247,16 +259,7 @@
 
             _picker = element.data('daterangepicker');
 
-            $(_picker.element).on('hide.daterangepicker', function () {
-              var newVal = {
-                startDate: _picker.startDate && _picker.startDate.unix ? _picker.startDate.unix() * 1000 : null,
-                endDate: _picker.endDate && _picker.endDate.unix ? _picker.endDate.unix() * 1000 : null,
-                dateRangeTypeId: _picker.chosenDateRangeTypeId
-              }
-
-              // update viewValue when closing datepicker
-              modelCtrl.$setViewValue(newVal);
-            });
+            $(_picker.element).on('hide.daterangepicker', read);
 
             _results = [];
             for (eventType in opts.eventHandlers) {
@@ -309,6 +312,8 @@
               }) : null));
             });
           }
+
+          $scope.$applyAsync(read);
 
           return $scope.$on('$destroy', function () {
             return _picker != null ? _picker.remove() : void 0;
